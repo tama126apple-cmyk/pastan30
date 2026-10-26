@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>パス単 3級 (1〜30)</title>
+</head>
+<body>
+
+    <h2>英検3級 パス単 (1〜30) テスト</h2>
+
+    <!-- スタート画面 -->
+    <div id="start-div">
+        <p>1〜30の単語からランダムに全30問出題します。</p>
+        <button id="start-btn" type="button" style="padding:10px 20px; font-size:16px; cursor:pointer;">テストスタート！</button>
+    </div>
+
+    <!-- 問題画面 -->
+    <div id="quiz-div" style="display:none;">
+        <p id="q-count"></p>
+        <h1 id="q-word" style="color:blue;"></h1>
+        <p>意味を入力してください：</p>
+        <input type="text" id="ans-input" style="font-size:18px; padding:5px;" autocomplete="off">
+        <br><br>
+        <button id="ans-btn" type="button" style="padding:8px 16px; font-size:16px; cursor:pointer;">回答する</button>
+
+        <div id="result-div" style="display:none; margin-top:15px;">
+            <p id="result-text" style="font-size:18px; font-weight:bold;"></p>
+            <button id="next-btn" type="button" style="padding:8px 16px; font-size:16px; cursor:pointer;">次の問題へ ➔</button>
+        </div>
+    </div>
+
+    <!-- 終了画面 -->
+    <div id="end-div" style="display:none;">
+        <h2>テスト終了</h2>
+        <h3 id="final-score"></h3>
+        <button onclick="location.reload()" type="button" style="padding:10px 20px; cursor:pointer;">もう一度やる</button>
+    </div>
+
+<script>
+var data = [
+    {en: "look", ja: "に見える"},
+    {en: "take", ja: "を持っていく"},
+    {en: "make", ja: "を作る"},
+    {en: "see", ja: "を見る"},
+    {en: "watch", ja: "を注意して見る"},
+    {en: "give", ja: "に与える"},
+    {en: "work", ja: "働く"},
+    {en: "call", ja: "と呼ぶ"},
+    {en: "enjoy", ja: "を楽しむ"},
+    {en: "find", ja: "を見つける"},
+    {en: "practice", ja: "を練習する"},
+    {en: "tell", ja: "に話す"},
+    {en: "leave", ja: "を置き忘れる"},
+    {en: "need", ja: "を必要とする"},
+    {en: "say", ja: "を言う"},
+    {en: "finish", ja: "を終える"},
+    {en: "sell", ja: "を売る"},
+    {en: "clean", ja: "を掃除する"},
+    {en: "wait", ja: "待つ"},
+    {en: "become", ja: "になる"},
+    {en: "show", ja: "に見せる"},
+    {en: "join", ja: "に加わる"},
+    {en: "bring", ja: "を持ってくる"},
+    {en: "move", ja: "を動かす"},
+    {en: "put", ja: "を置く"},
+    {en: "drive", ja: "を運転する"},
+    {en: "rain", ja: "雨が降る"},
+    {en: "win", ja: "に勝つ"},
+    {en: "speak", ja: "を話す"},
+    {en: "travel", ja: "旅行する"}
+];
+
+var list = [];
+var idx = 0;
+var score = 0;
+
+function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+    return a;
+}
+
+document.getElementById("start-btn").onclick = function() {
+    list = shuffle(data);
+    idx = 0;
+    score = 0;
+    document.getElementById("start-div").style.display = "none";
+    document.getElementById("quiz-div").style.display = "block";
+    show();
+};
+
+function show() {
+    if (idx < list.length) {
+        document.getElementById("q-count").innerText = "問題 " + (idx + 1) + " / " + list.length;
+        document.getElementById("q-word").innerText = list[idx].en;
+        document.getElementById("ans-input").value = "";
+        document.getElementById("ans-input").disabled = false;
+        document.getElementById("result-div").style.display = "none";
+        document.getElementById("ans-btn").style.display = "inline";
+        document.getElementById("ans-input").focus();
+    } else {
+        document.getElementById("quiz-div").style.display = "none";
+        document.getElementById("end-div").style.display = "block";
+        document.getElementById("final-score").innerText = "結果: " + score + " / " + list.length + " 問正解";
+    }
+}
+
+document.getElementById("ans-btn").onclick = function() {
+    var val = document.getElementById("ans-input").value.trim();
+    if (!val) return;
+
+    document.getElementById("ans-input").disabled = true;
+    document.getElementById("ans-btn").style.display = "none";
+
+    var item = list[idx];
+    var resText = document.getElementById("result-text");
+
+    if (item.ja.indexOf(val) !== -1) {
+        score++;
+        resText.style.color = "green";
+        resText.innerText = "⭕ 正解！";
+    } else {
+        resText.style.color = "red";
+        resText.innerText = "❌ 不正解（正解: " + item.ja + "）";
+    }
+
+    document.getElementById("result-div").style.display = "block";
+};
+
+document.getElementById("next-btn").onclick = function() {
+    idx++;
+    show();
+};
+</script>
+
+</body>
+</html>
